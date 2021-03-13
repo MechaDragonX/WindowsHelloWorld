@@ -14,41 +14,41 @@ HINSTANCE hInst;
 // Title Bar Text
 WCHAR szTitle[MAX_PATH];
 // Main Window Class Name
-WCHAR szWindowClass[MAX+PATH];
+WCHAR szWindowClass[MAX_PATH];
 
 // Forward Declarations of functions (in logical order)
-HRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 
 // Main Entry Point
-int APIENTRY(_In HINSTANCE hInstance,
-                _In_opt_ HINSTANCE hPrevIsntance,
-                _In_ LPWSTR lpCmdLine,
-                _In_ int nCmdShow)
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+                        _In_opt_ HINSTANCE hPrevIsntance,
+                        _In_ LPWSTR lpCmdLine,
+                        _In_ int nCmdShow)
 {
-    // Load localized strings, these are global to app
+    // Load global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_PATH);
-    LoadStringW(hInstance, IDC_WINDOWS_PROJECT1, szWindowClass, MAX_PATH);
+    LoadStringW(hInstance, IDC_WINDOWSHELLOWORLD, szWindowClass, MAX_PATH);
 
-    HACCEL hAccelTable = LoadAccellerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWS_PROJECT1));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWSHELLOWORLD));
 
     WNDCLASSEXW wcex = { sizeof(WNDCLASSEX) };
     wcex.style = CS_HREDRAW | CS_VREDRAW;
     wcex.lpfnWndProc = WndProc;
     wcex.cbClsExtra = 0;
-    wcex.cbWndExtra - 0;
-    wcex.hInstance = hInstnace;
-    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_WINDOWS_PROJECT1));
-    wcex.hCursor = LoadCursor(LoadCursor(nullptr, IDC_ARROW));
+    wcex.cbWndExtra = 0;
+    wcex.hInstance = hInstance;
+    wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDC_WINDOWSHELLOWORLD));
+    wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wcex.lpszMenuName = MAKEINTRESOURCE(IDC_WINDOWS_PROJECT1);
+    wcex.lpszMenuName = MAKEINTRESOURCE(IDC_WINDOWSHELLOWORLD);
     wcex.lpszClassName = szWindowClass;
-    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDC_SMALL));
+    wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
-    if(0 == RegisterClass(&wcex))
+    if(RegisterClassExW(&wcex) == 0)
         return FALSE;
     
-    hIsnt = hInstance;
+    hInst = hInstance;
     
     HWND hWnd = CreateWindow(szWindowClass,
                                 szTitle,
@@ -91,7 +91,7 @@ int APIENTRY(_In HINSTANCE hInstance,
     WM_PAINT    Paint the main window
     WM_DESTROY  Post a quit message, then return
 */
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAm lParam)
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
     {
@@ -102,7 +102,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAm lParam)
             switch(wmId)
             {
                 case IDM_ABOUT:
-                    DialogBox(hInst, MAKEINTRESOURCE(ADD_ABOUTBOX), hWnd, About);
+                    DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                     break;
                 case IDM_EXIT:
                     DestroyWindow(hWnd);
@@ -120,10 +120,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAm lParam)
             HDC hdc = BeginPaint(hWnd, &ps);
 
             GetClientRect(hWnd, &rect);
-
-            DrawText(hdc, L"Hello, Windows!". -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
-
+            DrawText(hdc, L"Hello, Windows!", -1, &rect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
             EndPaint(hWnd, &ps);
+
             break;
         }
 
@@ -132,14 +131,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAm lParam)
             break;
 
         default:
-            return defWindowProc(hWnd, message, wParam, lParam);
+            return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return 0;
 }
 
 // About Message Handler for About Dialog Box
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM, lParam)
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch(message)
     {
@@ -147,7 +146,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM, lParam)
             return (INT_PTR)TRUE;
 
         case WM_COMMAND:
-            if(LOWORD(wParam) == IDOK || LOWOR(wParam) == IDCANCEL)
+            if(LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
             {
                 EndDialog(hDlg, LOWORD(wParam));
                 return (INT_PTR)TRUE;
