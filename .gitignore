@@ -28,12 +28,10 @@
 
 # Executables
 /bin
+/x64
 *.exe
 *.out
 *.app
 
-# VS Files (includes things I never used and command line flags for compilation)
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
+# VS Files
 /.vs
