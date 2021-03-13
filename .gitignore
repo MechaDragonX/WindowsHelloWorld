@@ -27,11 +27,7 @@
 *.lib
 
 # Executables
-/bin
-/x64
+/Debug
 *.exe
 *.out
 *.app
-
-# VS Files
-/.vs
